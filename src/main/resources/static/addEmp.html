@@ -1,0 +1,147 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN" "http://www.w3.org/TR/html4/loose.dtd">
+<html>
+	<head>
+		<title>add Emp</title>
+		<meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+		<link rel="stylesheet" type="text/css"
+			href="css/style.css" />
+	</head>
+
+	<body>
+		<div id="wrap">
+			<div id="top_content">
+					<div id="header">
+					<div id="rightheader">
+						<p>
+							2009/11/20
+							<br />
+							<a href="javascript:;" @click="logout"> 安全退出 </a>
+						</p>
+					</div>
+					<div id="topheader">
+						<h1 id="title">
+							<a href="/ems_vue/emplist.html">main</a>
+						</h1>
+					</div>
+					<div id="navigation">
+					</div>
+				</div>
+				<div id="content">
+					<p id="whereami">
+					</p>
+					<h1>
+						add Emp info:
+					</h1>
+					<form action="emplist.html" method="post">
+						<table cellpadding="0" cellspacing="0" border="0"
+							class="form_table">
+							<tr>
+								<td valign="middle" align="right">
+									name:
+								</td>
+								<td valign="middle" align="left">
+									<input type="text" class="inputgri"   v-model="emp.name"  name="name" />
+								</td>
+							</tr>
+							<tr>
+								<td valign="middle" align="right">
+									photo:
+								</td>
+								<td valign="middle" align="left">
+									<input type="file"  ref="myPhoto" name="photo" />
+								</td>
+							</tr>
+							<tr>
+								<td valign="middle" align="right">
+									salary:
+								</td>
+								<td valign="middle" align="left">
+									<input type="text" class="inputgri" v-model="emp.salary" name="salary" />
+								</td>
+							</tr>
+							<tr>
+								<td valign="middle" align="right">
+									age:
+								</td>
+								<td valign="middle" align="left">
+									<input type="text" class="inputgri" v-model="emp.age" name="age" />
+								</td>
+							</tr>
+						</table>
+						<p>
+							<input type="button" class="button" value="Confirm"  @click="saveEmp"/>
+						</p>
+					</form>
+				</div>
+			</div>
+			<div id="footer">
+				<div id="footer_bg">
+					ABC@126.com
+				</div>
+			</div>
+		</div>
+	</body>
+</html>
+<script src="./js/vue.js"></script>
+<script src="./js/axios.min.js"></script>
+<script>
+	var app = new Vue({
+		el:"#wrap",
+		data:{ //数据
+			user:{}, //用来存放用户登录信息
+			emp:{  //定义一个员工对象
+
+			}
+		},
+		methods:{  //自定义函数
+			//处理安全退出
+			logout(){
+				localStorage.removeItem("user");
+				location.reload(true); //刷新页面
+			},
+			//保存员工的信息
+			saveEmp(){
+				console.log(this.emp);
+				console.log(this.$refs.myPhoto.files[0]); //获取ref 绑定的文件信息
+				//文件上传时 请求方式必须是post  enctype必须为multipart/form-data
+
+				var formData = new FormData();
+				formData.append("name",this.emp.name);
+				formData.append("salary",this.emp.salary);
+				formData.append("age",this.emp.age);
+				formData.append("photo",this.$refs.myPhoto.files[0]);
+				var _this = this;
+				axios({
+					method:"post",
+					url:"http://localhost:8080/ems_vue/emp/save",
+					data:formData,
+					headers:{
+						'content-type':'multipart/form-data'
+					}
+				}).then(res=>{
+					console.log(res.data)
+					if(res.data.state){
+						if(window.confirm(res.data.msg +",点击确认跳转到列表页面！")){
+							location.href="/ems_vue/emplist.html";
+						}else{
+							_this.emp= {};
+						}
+					}else{
+						alert(res.data.msg);
+					}
+				})
+			}
+		},
+		created(){
+			var userString = localStorage.getItem("user");
+			if(userString){
+				this.user = JSON.parse(userString);
+			}else{
+				alert("您尚未登录，点击确定跳转到登录页面");
+				location.href="/ems_vue/login.html";
+			}
+
+		}
+	})
+
+</script>

@@ -1,0 +1,41 @@
+<?xml version="1.0" encoding="utf-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<!--        namespace是用于绑定Dao接口的，即面向接口编程-->
+<mapper namespace="com.itnoob.dao.EmpDao">
+
+    <cache type="com.itnoob.cache.RedisCache" />
+
+    <insert id="save" parameterType="com.itnoob.entity.Emp"  useGeneratedKeys="true" keyProperty="id">
+        insert  into t_emp values(#{id},#{name},#{path},#{salary},#{age})
+    </insert>
+
+
+
+    <delete id="delete"  parameterType="String">
+        delete from t_emp where id = #{id}
+    </delete>
+
+
+    <select id="findAll" resultType="com.itnoob.entity.Emp"  >
+        select id,name,path,salary,age from t_emp
+    </select>
+
+
+    <select id="findOne" parameterType="string"  resultType="com.itnoob.entity.Emp">
+         select id,name,path,salary,age from t_emp
+         where id = #{id}
+    </select>
+
+
+    <!--update-->
+    <update id="update" parameterType="com.itnoob.entity.Emp">
+        update t_emp set
+        name =#{name},
+        path = #{path},
+        salary = #{salary},
+        age = #{age}
+        where
+        id = #{id}
+    </update>
+
+</mapper>

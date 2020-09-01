@@ -1,0 +1,70 @@
+#spring mvc
+server:
+  port: 8080
+  servlet:
+    context-path: /ems_vue
+
+
+#datasource
+spring:
+#  mvc:
+#    static-path-pattern: /static/**
+  application:
+    name: user
+  datasource:
+    type: com.alibaba.druid.pool.DruidDataSource
+    driver-class-name: com.mysql.cj.jdbc.Driver
+    url: jdbc:mysql://localhost:3306/emp?serverTimezone=UTC&useSSl=false
+    username: root
+    password: mysql
+  thymeleaf:
+    check-template: false
+  resources:
+    static-locations: classpath:/static/,file:${photo.dir}
+
+  # redis
+  redis:
+      host: 127.0.0.1
+      port: 6379
+      timeout: 3
+      database: 0
+
+
+
+
+
+#mybatis配置文件
+mybatis:
+  mapper-locations: classpath:com/itnoob/mapper/*.xml
+  type-aliases-package: com.itnoob.entity
+  scripting-language-driver:
+    freemarker:
+      template-file:
+
+
+
+#日志配置文件
+logging:
+  level:
+    root: info
+    com.itnoob.dao: debug
+    com.itnoob.controller: debug
+    com.itnoob.service: info
+
+  file:
+    path: log/log.log
+
+photo:
+  dir: E:\\vue\\ems_vue\\src\\main\\resources\\static\\photos
+
+
+
+
+
+
+
+
+
+
+
+

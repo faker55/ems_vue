@@ -1,0 +1,8 @@
+{
+  "properties": [
+    {
+      "name": "spring.resources.static-locations.file",
+      "type": "java.lang.String",
+      "description": "Description for spring.resources.static-locations.file."
+  }
+] }
